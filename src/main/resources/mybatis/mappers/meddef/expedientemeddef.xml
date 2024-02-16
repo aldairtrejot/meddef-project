@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="expediente_meddef">
+	<cache />
+	
+	<resultMap type="ExpedienteMeddefEO" id="expediente_meddef">
+		<id column="ExpedienteMeddefEO_id" property="id" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_num_expediente" property="num_expediente" javaType="String"/>
+		<result column="ExpedienteMeddefEO_num_credfis" property="num_credfis" javaType="String"/>	
+		<result column="ExpedienteMeddefEO_num_control" property="num_control" javaType="String"/>
+		<result column="ExpedienteMeddefEO_importe" property="importe" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_id_sentencia" property="id_sentencia" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_id_estatus" property="id_estatus" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_id_area" property="id_area" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_fecha_hora" property="fecha_hora" javaType="Date"/>
+		<result column="ExpedienteMeddefEO_codigo_estatal" property="codigo_estatal" javaType="Integer"/>
+	</resultMap>
+	
+	<resultMap type="ExpedienteMeddefEO" id="expediente_meddeRE">
+		<id column="ExpedienteMeddefEO_id" property="id" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_num_expediente" property="num_expediente" javaType="String"/>
+		<result column="ExpedienteMeddefEO_num_credfis" property="num_credfis" javaType="String"/>	
+		<result column="ExpedienteMeddefEO_num_control" property="num_control" javaType="String"/>
+		<result column="ExpedienteMeddefEO_importe" property="importe" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_id_sentencia" property="id_sentencia" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_id_estatus" property="id_estatus" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_id_area" property="id_area" javaType="Integer"/>
+		<result column="ExpedienteMeddefEO_fecha_hora" property="fecha_hora" javaType="Date"/>
+		<result column="ExpedienteMeddefEO_codigo_estatal" property="codigo_estatal" javaType="Integer"/>
+		<association property="contribuyente" javaType="String" >
+			<result column="ContribuyenteEO_contribuyente" property="contribuyente" javaType="String"/>
+		</association>
+	</resultMap>
+	
+	<sql id="fields">
+		ExpedienteMeddefEO.id_expediente		ExpedienteMeddefEO_id,
+		ExpedienteMeddefEO.num_expediente		ExpedienteMeddefEO_num_expediente,
+		ExpedienteMeddefEO.num_credfis			ExpedienteMeddefEO_num_credfis,
+		ExpedienteMeddefEO.num_control			ExpedienteMeddefEO_num_control,
+		ExpedienteMeddefEO.importe				ExpedienteMeddefEO_importe,
+		ExpedienteMeddefEO.codigo_estatal		ExpedienteMeddefEO_codigo_estatal,
+		ExpedienteMeddefEO.id_sentencia			ExpedienteMeddefEO_id_sentencia,
+		ExpedienteMeddefEO.id_area				ExpedienteMeddefEO_id_area,
+		ExpedienteMeddefEO.id_estatus			ExpedienteMeddefEO_id_estatus
+	</sql>
+	
+	<sql id="fieldsUno">
+		ExpedienteMeddefEO.num_expediente		ExpedienteMeddefEO_num_expediente
+	</sql>
+	
+	<sql id="fieldsAll">
+		<include refid="fields" />,
+		<include refid="contribuyente.fieldsUno" />
+	</sql>
+	
+	<sql id="orderByFields">
+		ExpedienteMeddefEO_num_expediente
+	</sql>
+	
+	<sql id="table">
+		expediente_meddef ExpedienteMeddefEO
+	</sql>
+	
+	<sql id="query">
+		SELECT <include refid="fields" />
+		FROM <include refid="table" />
+	</sql>
+
+	<select id="listado" resultMap="expediente_meddef" parameterType="ContribuyenteEO">
+		<include refid="query" />
+		WHERE ExpedienteMeddefEO.codigo_estatal=#{codigo_estatal}
+		ORDER BY <include refid="orderByFields" />
+	</select>
+	
+	<insert id="agregar" parameterType="java.util.Map">
+		INSERT INTO expediente_meddef(codigo_estatal,num_expediente,num_credfis,num_control,importe,id_area,id_sentencia,
+			   id_estatus,fecha_hora)
+		VALUES (#{contribuyente.codigo_estatal},#{expediente_meddef.num_expediente},#{expediente_meddef.num_credfis},
+			   #{expediente_meddef.num_control},#{expediente_meddef.importe},#{expediente_meddef.id_area},
+			   #{expediente_meddef.id_sentencia},#{expediente_meddef.id_estatus},NOW())
+	</insert>
+	
+	<update id="editar" parameterType="ExpedienteMeddefEO">
+		UPDATE expediente_meddef
+		SET  num_expediente=#{num_expediente}, num_credfis=#{num_credfis}, num_control=#{num_control}, importe=#{importe},
+			 id_area=#{id_area},id_sentencia=#{id_sentencia},id_estatus=#{id_estatus},fecha_hora=NOW()
+		WHERE id_expediente= #{id}
+	</update>
+	
+	<select id="reporteExpediente" resultMap="expediente_meddeRE" parameterType="ReporteEO">
+		SELECT DISTINCT <include refid="fieldsAll" /> 
+		FROM <include refid="table" />
+ 		INNER JOIN <include refid="contribuyente.table" />
+		ON ExpedienteMeddefEO.codigo_estatal = ContribuyenteEO.codigo_estatal
+			<if test = "anio != null"> 
+ 				 INNER JOIN <include refid="seguimiento_meddef.table" />
+				 ON ExpedienteMeddefEO.id_expediente =  SeguimientoMeddefEO.id_expediente
+			</if>
+			<if test = "contribuyente != null"> 
+				 <bind name="pattern" value="'%' + contribuyente + '%'" />
+ 				 WHERE ContribuyenteEO.contribuyente LIKE #{pattern}
+			</if>
+			<if test = "num_expediente != null"> 
+				 <bind name="pattern" value="'%' + num_expediente + '%'" />
+ 				 AND ExpedienteMeddefEO.num_expediente LIKE #{pattern}
+			</if>
+			<if test = "id_area != null"> 
+ 				 AND ExpedienteMeddefEO.id_area	= #{id_area}
+			</if>
+			<if test = "id_estatus != null"> 
+ 				 AND ExpedienteMeddefEO.id_estatus = #{id_estatus}
+			</if>
+			<if test = "num_credfis != null"> 
+				 <bind name="pattern" value="'%' + num_credfis + '%'" />
+ 				 AND ExpedienteMeddefEO.num_credfis LIKE #{pattern}
+			</if>
+			<if test = "anio != null"> 
+ 				 AND SeguimientoMeddefEO.anio = #{anio}
+			</if>
+			;
+	</select>
+	
+	<delete id="delete" parameterType="ExpedienteMeddefEO">
+		DELETE FROM expediente_meddef
+		WHERE id_expediente = #{id}
+	</delete>
+
+</mapper>
+

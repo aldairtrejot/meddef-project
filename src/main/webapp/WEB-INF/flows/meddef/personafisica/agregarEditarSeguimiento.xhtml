@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/views/templates/default/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                	<p:focus for="${seguimiento_meddef.id == null ? p:resolveFirstComponentWithId('inputCodigoEstatal', view).clientId : p:resolveFirstComponentWithId('inputNumExpediente', view).clientId}" />
+                	<p:growl autoUpdate="true" />
+                	<p:panel header="${seguimiento_meddef.id == null ? 'Agregar' : 'Editar'} Seguimiento con Núm. Crédito Fiscal: ${expedienteAux.num_credfis}"> 
+                			<p:panelGrid columns="2">
+                    		
+	                			<p:outputLabel for="@next" value="Tipo de Entrada" style="font-weight: bold;" />
+								<h:selectOneMenu value="#{seguimiento_meddef.id_tipoentrada}">
+									<f:selectItems value="#{catalagoMenuC.catTipoEntradaList}" />
+								</h:selectOneMenu>
+	                			
+	                			<p:outputLabel for="@next" value="Oficio Salida" style="font-weight: bold;" />
+	                			<p:inputText id="inputOficioSalida" value="${seguimiento_meddef.oficio_salida}" size="30">
+	                				<f:validateLength maximum="15"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Año" style="font-weight: bold;" />
+	                			<p:inputText id="inputAnio" value="${seguimiento_meddef.anio}" size="30"/>
+								
+								<p:outputLabel for="@next" value="Fecha Recepción" style="font-weight: bold;" />
+								<p:calendar id="inlinea" value="#{seguimiento_meddef.fecha_recepcion}" locale="es" mode="popup" size="30"/>
+								
+								<p:outputLabel for="@next" value="Oficio Entrada" style="font-weight: bold;" />
+	                			<p:inputText id="inputOficioEntrada" value="${seguimiento_meddef.oficio_entrada}" size="100" >
+	                				<f:validateLength maximum="100"/>
+								</p:inputText>
+								
+								<p:outputLabel for="@next" value="Oficio Certificada" style="font-weight: bold;" />
+								<p:inputText id="inputOficioCertificada" value="${seguimiento_meddef.oficio_certificada}" size="125">
+									<f:validateLength maximum="100"/>
+								</p:inputText>
+								
+								<p:outputLabel for="@next" value="Descripción Oficio PF" style="font-weight: bold;" />
+								<p:inputText id="inputOficioPF" value="${seguimiento_meddef.oficio_pf}" size="125">
+									<f:validateLength maximum="500"/>
+								</p:inputText>
+								
+								<p:outputLabel for="@next" value="Seguimiento" style="font-weight: bold;" />
+								<p:inputText id="inputOficioSJ" value="${seguimiento_meddef.oficio_sj}" size="125">
+									<f:validateLength maximum="500"/>
+								</p:inputText>
+								
+								<p:outputLabel for="@next" value="Descripción Seguimiento" style="font-weight: bold;" />
+								<h:inputTextarea id="direccion" value="${seguimiento_meddef.desc_seguimiento}" cols="130" rows="8" 
+									style="font-family: Roboto,Helvetica Neue,sans-serif;border-color: #bdbdbd;">
+									<f:validateLength maximum="2000"/>
+								</h:inputTextarea>
+
+								</p:panelGrid>
+                		
+                		<f:facet name="footer">
+							<c:choose>
+								<c:when test="${seguimiento_meddef.id  == null}">
+									<p:commandButton value="Guardar" action="agregar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:when>
+								<c:otherwise>
+									<p:commandButton value="Guardar" action="editar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:otherwise>
+								</c:choose>
+							<p:commandButton value="Cancelar" action="cancelar" icon="ui-icon-clear" immediate="true" style="margin-right: 5px;" />
+						
+						</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+            </div>
+        </div>
+
+		
+	</ui:define>
+</ui:composition>

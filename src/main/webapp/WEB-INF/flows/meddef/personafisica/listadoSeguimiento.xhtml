@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/WEB-INF/views/templates/default/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                	<p:panel id="panelseguimientoExpediente" header="Seguimiento con Número de Expediente: ${expedienteAux.num_expediente}, 
+                			Núm. Crédito Fiscal: ${expedienteAux.num_credfis} y Codigo Estatal: ${expedienteAux.codigo_estatal} ">
+                		<p:dataTable value="${modelo.listado}"  var="fila" emptyMessage="Sin Resultados"
+                			rowKey="${fila.id}" selection="${modelo.seleccionado}" selectionMode="single"
+                			paginator="true" rows="15" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+
+							<p:column headerText="Tipo de Entrada" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_tipoentrada}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_tipoentrada}">
+            					<h:outputLabel value="#{catalogoResultadoC.catalogoTipoEntrada(fila.id_tipoentrada)}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Oficio Salida" width="85" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_salida}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_salida}">
+                				<h:outputLabel value="${fila.oficio_salida}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Año" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.anio}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.anio}">
+                				<h:outputLabel value="${fila.anio}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Fecha Recepción" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.fecha_recepcion}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.fecha_recepcion}">
+                				<h:outputLabel value="${fila.fecha_recepcion}">
+                				<f:convertDateTime dateStyle="full" pattern="dd/MM/yyyy"/>  
+                				</h:outputLabel>
+                			</p:column>
+                			
+                			<p:column headerText="Oficio Entrada" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_entrada}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_entrada}">
+                				<h:outputLabel value="${fila.oficio_entrada}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Oficio Certificada" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_certificada}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_certificada}">
+                				<h:outputLabel value="${fila.oficio_certificada}"/>
+                			</p:column>
+
+                			<p:column headerText="Descripción Oficio PF" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_pf}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_pf}">
+                				<h:outputLabel value="${fila.oficio_pf}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Seguimiento" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_sj}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_sj}">
+                				<h:outputLabel value="${fila.oficio_sj}"/>
+                			</p:column>
+
+                			<p:column headerText="Descripción Seguimiento" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.desc_seguimiento}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.desc_seguimiento}">
+                				<h:outputLabel value="${fila.desc_seguimiento}"/>
+                			</p:column>
+                			
+							</p:dataTable>
+                		
+                		<f:facet name="footer">
+							<p:commandButton value="Regresar" action="regresar" icon="ui-icon-triangle-1-w" style="margin-right: 5px;" />
+                			<p:commandButton value="Agregar seguimiento" action="agregarSeguimiento" icon="ui-icon-add" style="margin-right: 5px;" />
+                			<c:choose>
+								<c:when test="${validacion == 'true'}">
+									<p:commandButton value="Editar seguimiento" action="editarSeguimiento" icon="ui-icon-edit" style="margin-right: 5px;" />
+									<p:commandButton id="botonEliminar" value="Eliminar" action="borrar"
+										icon="ui-icon-delete" style="margin-right: 5px;">
+										<p:confirm header="Eliminar Seguimiento"
+										message="Esta acción no se puede deshacer" icon="ui-icon-alert" />
+									</p:commandButton>
+								</c:when>
+							</c:choose>
+                		</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+                 <h:form>
+					<p:confirmDialog global="true">
+						<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" style="background-color:#691B31;" />
+						<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" style="background-color:#691B31;"/>
+					</p:confirmDialog>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+            </div>
+        </div>
+        
+    </ui:define>
+
+</ui:composition>

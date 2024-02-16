@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/default/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<h:form>
+					<p:panel id="panelReporte" header="Reporte">
+					<p:growl autoUpdate="true" />
+						<p:panelGrid columns="2">
+						
+							<p:outputLabel for="@next" value="Contribuyente" style="font-weight: bold;" />
+							<p:inputText id="inputReporteContribuyente" value="${reporte.contribuyente}" size="30"/>
+							
+							<p:outputLabel for="@next" value="Número de Expediente" style="font-weight: bold;" />
+							<p:inputText id="inputReporteNumeroExpediente" value="${reporte.num_expediente}" size="30"/>
+
+							<p:outputLabel for="@next" value="Tipo Área" style="font-weight: bold;" />
+							<h:selectOneMenu value="#{reporte.id_area}">
+								<f:selectItems value="#{catalagoMenuC.catAreaList}" />
+							</h:selectOneMenu>
+							
+							<p:outputLabel for="@next" value="Tipo Estatus" style="font-weight: bold;" />
+							<h:selectOneMenu value="#{reporte.id_estatus}">
+								<f:selectItems value="#{catalagoMenuC.catEstatusList}" />
+							</h:selectOneMenu>
+							
+							<p:outputLabel for="@next" value="Número de Crédito Fiscal" style="font-weight: bold;" />
+							<p:inputText id="inputReporteNumeroCredifis" value="${reporte.num_credfis}" size="30"/>
+							
+							<p:outputLabel for="@next" value="Año" style="font-weight: bold;" />
+							<p:inputText id="inputReporteAnio" value="${reporte.anio}" size="30"/>
+							
+						</p:panelGrid>
+						
+						<f:facet name="footer">
+                			<p:commandButton value="Buscar" action="buscar" icon="ui-icon-search" style="margin-right: 5px;" />	
+							<p:commandButton value="Limpiar" action="limpiar" icon="ui-icon-trash" style="margin-right: 5px; " />
+						</f:facet>
+						
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+				</h:form>
+
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

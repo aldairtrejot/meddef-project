@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://saganet.com.mx/webflow/spring-webflow-2.0.xsd">
+
+	<view-state id="listado">
+		<on-entry>
+			<evaluate expression="ContribuyenteC.modeloPM()" result="viewScope.modelo" />
+			<evaluate expression="ContribuyenteC.validacion(viewScope.modelo.listado)" result="viewScope.validacion" />
+		</on-entry>
+		
+		<transition on="agregar" to="agregarEditar">
+			<evaluate expression="ContribuyenteC.nuevo()" result="requestScope.contribuyente" />
+		</transition>
+		
+		<transition on="editar" to="agregarEditar">
+			<set name="requestScope.contribuyente" value="viewScope.modelo.seleccionado" />
+		</transition>
+
+		<transition on="expediente" to="listadoExpediente">
+	 		<set name="flowScope.contribuyenteAux" value="viewScope.modelo.seleccionado" />
+		</transition>
+		
+		<transition on="borrar" to="listado">
+	 		<evaluate expression="EliminarC.deleteCont(viewScope.modelo.seleccionado)" />
+		</transition>
+
+	</view-state>
+
+
+	<view-state id="agregarEditar">
+		<on-entry>
+			<set name="viewScope.contribuyente" value="requestScope.contribuyente" />
+			<set name="viewScope.contribuyenteCe" value="requestScope.contribuyente.getCodigo_estatal()" />
+		</on-entry>
+		
+		<transition on="actualizar" to="listado">
+			<evaluate expression="ContribuyenteC.editar(viewScope.contribuyente,viewScope.contribuyenteCe)" />
+		</transition>
+		
+		<transition on="guardar" to="listado">
+			<evaluate expression="ContribuyenteC.agregarPM(viewScope.contribuyente)" />
+		</transition>
+		
+		<transition on="cancelar" to="listado" />
+	</view-state>
+	
+	
+	<view-state id="listadoExpediente">
+		<on-entry>
+			<evaluate expression="ExpedienteMeddefC.modelo(contribuyenteAux)" result="viewScope.modelo"/>
+			<evaluate expression="ExpedienteMeddefC.validacion(viewScope.modelo.listado)" result="viewScope.validacion" />
+		</on-entry>
+		
+		<transition on="agregarExpediente" to="agregarEditarExpediente">
+			<evaluate expression="ExpedienteMeddefC.nuevo()" result="requestScope.expediente_meddef"/>
+		</transition>
+		
+		<transition on="editarExpediente" to="agregarEditarExpediente">
+			<set name="requestScope.expediente_meddef" value="viewScope.modelo.seleccionado"/>
+		</transition>
+
+		<transition on="listadoSeguimiento" to="listadoSeguimiento">
+			<set name="flowScope.expedienteAux" value="viewScope.modelo.seleccionado" />
+		</transition>
+		
+		<transition on="borrar" to="listadoExpediente">
+	 		<evaluate expression="EliminarC.deleteExp(viewScope.modelo.seleccionado)" />
+		</transition>
+		
+		<transition on="regresar" to="listado" />
+	</view-state>
+	
+	<view-state id="agregarEditarExpediente">
+		<on-entry>
+			<set name="viewScope.expediente_meddef" value="requestScope.expediente_meddef"/>
+		</on-entry>
+		
+		<transition on="agregar" to="listadoExpediente">
+			<evaluate expression="ExpedienteMeddefC.agregar(viewScope.expediente_meddef,contribuyenteAux)" />
+		</transition>
+		
+		<transition on="editar" to="listadoExpediente">
+			<evaluate expression="ExpedienteMeddefC.editar(viewScope.expediente_meddef)" />
+		</transition>
+
+		<transition on="cancelar" to="listadoExpediente" />
+	</view-state>
+	
+	<view-state id="listadoSeguimiento">
+		<on-entry>
+			<evaluate expression="SeguimientoMeddefC.modelo(expedienteAux)" result="viewScope.modelo" />
+			<evaluate expression="SeguimientoMeddefC.validacion(viewScope.modelo.listado)" result="viewScope.validacion" />
+		</on-entry>
+		
+		<transition on="agregarSeguimiento" to="agregarEditarSeguimiento">
+			<evaluate expression="SeguimientoMeddefC.nuevo()" result="requestScope.seguimiento_meddef"/>
+		</transition>
+		
+		<transition on="editarSeguimiento" to="agregarEditarSeguimiento">
+			<set name="requestScope.seguimiento_meddef" value="viewScope.modelo.seleccionado"/>
+		</transition>
+		
+		<transition on="borrar" to="listadoSeguimiento">
+	 		<evaluate expression="EliminarC.deleteSeg(viewScope.modelo.seleccionado)" />
+		</transition>
+		
+		<transition on="regresar" to="listadoExpediente" />
+		
+	</view-state>
+	
+	<view-state id="agregarEditarSeguimiento">
+		<on-entry>
+			<set name="viewScope.seguimiento_meddef" value="requestScope.seguimiento_meddef"/>
+		</on-entry>
+		
+		<transition on="agregar" to="listadoSeguimiento">
+			<evaluate expression="SeguimientoMeddefC.agregar(viewScope.seguimiento_meddef,expedienteAux)" />
+		</transition>
+		
+		<transition on="editar" to="listadoSeguimiento">
+			<evaluate expression="SeguimientoMeddefC.editar(viewScope.seguimiento_meddef)" />
+		</transition>
+		
+		<transition on="cancelar" to="listadoSeguimiento" />
+	</view-state>
+	
+	
+	
+	<end-state id="terminarFlujo" />
+
+</flow>

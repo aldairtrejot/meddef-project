@@ -1,0 +1,231 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/views/templates/default/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                <p:panel id="panelReporte" header="Reporte">
+					<p:growl autoUpdate="true" />
+					<p:panel id="panelReporteIngrresado" header="Reporte Ingresado">
+						<p:panelGrid columns="2">
+						
+							<p:outputLabel for="@next" value="Contribuyente" style="font-weight: bold;" />
+							<h:outputText id="inputReporteContribuyente" value="${reporte.contribuyente}" size="30"/>
+							
+							<p:outputLabel for="@next" value="Número de Expediente" style="font-weight: bold;" />
+							<h:outputText id="inputReporteNumeroExpediente" value="${reporte.num_expediente}" size="30"/>
+
+							<p:outputLabel for="@next" value="Tipo de Area" style="font-weight: bold;" />
+							<h:outputLabel value="#{catalogoResultadoC.catalogoArea(reporte.id_area)}" size="30"/>
+
+							<p:outputLabel for="@next" value="Tipo de Estatus" style="font-weight: bold;" />
+							<h:outputText id="inputBusquedaEstatus" value="#{catalogoResultadoC.catalogoEstatus(reporte.id_estatus)}" size="30"/>
+							
+							<p:outputLabel for="@next" value="Número de Crédito Fiscal" style="font-weight: bold;" />
+							<h:outputText id="inputReporteNumeroCredifis" value="${reporte.num_credfis}" size="30"/>
+							
+							<p:outputLabel for="@next" value="Año" style="font-weight: bold;" />
+							<h:outputText id="inputReporteAnio" value="${reporte.anio}" size="30"/>
+							
+						</p:panelGrid>
+					</p:panel>
+				</p:panel>
+					
+                	<p:focus />
+                	<p:growl autoUpdate="true" />
+                	<p:panel header="Resultado de Búsqueda"> 
+                		<p:panel id="panelPersonmoral" header="Contribuyente" >
+                		<p:dataTable value="${contribuyente.listado}" var="fila" emptyMessage="Sin Resultados"
+                			rowKey="${fila.codigo_estatal}" selectionMode="single"
+                			paginator="true" rows="15" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+                			
+                			<p:column headerText="Código Estatal" width="75" style="text-align:center;" id="ce"
+                				filterable="true" filterBy="#{fila.codigo_estatal}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.codigo_estatal}">
+                				<h:outputLabel value="${fila.codigo_estatal}"/>
+                			</p:column>
+                			
+                			<p:column headerText="RFC" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.rfc}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.rfc}">
+                				<h:outputLabel value="${fila.rfc}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Razón Social" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.razon_social}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.razon_social}">
+                				<h:outputLabel value="${fila.razon_social}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Contribuyente" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.contribuyente}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.contribuyente}">
+                				<h:outputLabel value="${fila.contribuyente}"/>
+                			</p:column>
+                			
+                			<p:column headerText="RFC Md" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.rfc_md}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.rfc_md}">
+                				<h:outputLabel value="${fila.rfc_md}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Tipo de Persona" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.tipo_persona}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.tipo_persona}">
+                				<h:outputLabel rendered="#{fila.tipo_persona == 'F'}" value="Persona Física"/>
+                				<h:outputLabel rendered="#{fila.tipo_persona == 'M'}" value="Persona Moral"/>
+                			</p:column>
+                			
+                		</p:dataTable>
+                		
+                	</p:panel>
+                	<p:panel id="panelExpediente" header="Expediente">
+                		<p:dataTable value="${expediente.listado}"  var="fila" emptyMessage="Sin Resultados"
+                			rowKey="${fila.id}"  selectionMode="single"
+                			paginator="true" rows="15" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+							
+							<p:column headerText="Contribuyente" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.contribuyente}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.contribuyente}">
+                				<h:outputLabel value="${fila.contribuyente}"/>
+                			</p:column>
+							
+                			<p:column headerText="Número Expediente" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.num_expediente}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.num_expediente}">
+                				<h:outputLabel value="${fila.num_expediente}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Número de Crédito Fiscal" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.num_credfis}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.num_credfis}">
+                				<h:outputLabel value="${fila.num_credfis}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Número Control" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.num_control}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.num_control}">
+                				<h:outputLabel value="${fila.num_control}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Importe" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.importe}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.importe}">
+                				<h:outputLabel value="${fila.importe}"/>
+                			</p:column>
+      
+                			<p:column headerText="Tipo Área" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_area}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_area}">
+                				<h:outputLabel value="#{catalogoResultadoC.catalogoArea(fila.id_area)}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Tipo Sentencia" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_sentencia}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_sentencia}">
+                				<h:outputLabel value="#{catalogoResultadoC.catalogoSentencia(fila.id_sentencia)}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Tipo Estatus" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_estatus}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_estatus}">
+                				<h:outputLabel value="#{catalogoResultadoC.catalogoEstatus(fila.id_estatus)}"/>
+                			</p:column>
+
+                			</p:dataTable>
+                	</p:panel>
+
+                	<p:panel id="panelseguimientoExpediente" header="Seguimiento">
+                		<p:dataTable value="${seguimiento.listado}"  var="fila" emptyMessage="Sin Resultados"
+                			rowKey="${fila.id}" selectionMode="single"
+                			paginator="true" rows="15" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+							
+							<p:column headerText="Contribuyente" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.contribuyente}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.contribuyente}">
+                				<h:outputLabel value="${fila.contribuyente}"/>
+                			</p:column>
+							
+                			<p:column headerText="Número Expediente" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.num_expediente}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.num_expediente}">
+                				<h:outputLabel value="${fila.num_expediente}"/>
+                			</p:column>
+							
+                			<p:column headerText="Tipo de Entrada" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_tipoentrada}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_tipoentrada}">
+            					<h:outputLabel value="#{catalogoResultadoC.catalogoTipoEntrada(fila.id_tipoentrada)}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Oficio Salida" width="85" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_salida}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_salida}">
+                				<h:outputLabel value="${fila.oficio_salida}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Año" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.anio}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.anio}">
+                				<h:outputLabel value="${fila.anio}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Fecha Recepción" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.fecha_recepcion}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.fecha_recepcion}">
+                				<h:outputLabel value="${fila.fecha_recepcion}">
+                				<f:convertDateTime dateStyle="full" pattern="dd/MM/yyyy"/>  
+                				</h:outputLabel>
+                			</p:column>
+                			
+                			<p:column headerText="Oficio Entrada" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_entrada}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_entrada}">
+                				<h:outputLabel value="${fila.oficio_entrada}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Oficio Certificada" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_certificada}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_certificada}">
+                				<h:outputLabel value="${fila.oficio_certificada}"/>
+                			</p:column>
+
+                			<p:column headerText="Descripción Oficio PF" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_pf}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_pf}">
+                				<h:outputLabel value="${fila.oficio_pf}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Seguimiento" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.oficio_sj}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.oficio_sj}">
+                				<h:outputLabel value="${fila.oficio_sj}"/>
+                			</p:column>
+
+                			<p:column headerText="Descripción Seguimiento" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.desc_seguimiento}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.desc_seguimiento}">
+                				<h:outputLabel value="${fila.desc_seguimiento}"/>
+                			</p:column>
+                			
+							</p:dataTable>
+                	</p:panel>
+
+                		<f:facet name="footer">
+                			<p:commandButton value="Regresar" onclick="history.back()" icon="ui-icon-triangle-1-w" style="margin-right: 5px;" />
+                		</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+            </div>
+        </div>
+        
+    </ui:define>
+
+</ui:composition>

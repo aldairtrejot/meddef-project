@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/WEB-INF/views/templates/default/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                	<p:focus for="${contribuyente.codigo_estatal == null ? p:resolveFirstComponentWithId('inputCodigoEstatal', view).clientId : p:resolveFirstComponentWithId('inputRfc', view).clientId}" />
+                	<p:growl autoUpdate="true" />
+                	<p:panel header="${contribuyente.codigo_estatal == null ? 'Agregar' : 'Editar'} Persona Física"> 
+                			<p:panelGrid columns="2">
+                			
+	                			<p:outputLabel for="@next" value="Código Estatal" style="font-weight: bold;" />
+	                			<p:inputText id="inputCodigoEstatal" value="${contribuyente.codigo_estatal}" size="20"/>
+	                			
+	                			<p:outputLabel for="@next" value="RFC" style="font-weight: bold;" />
+	                			<p:inputText id="inputRfc" value="${contribuyente.rfc}" size="20" validator="#{validacionC.rfcF}" />
+	                			
+	                			<p:outputLabel for="@next" value="CURP" style="font-weight: bold;" />
+	                			<p:inputText id="inputCurp" value="${contribuyente.curp}" size="20" validator="#{validacionC.curp}"/>
+								
+								<p:outputLabel for="@next" value="RFC Md" style="font-weight: bold;" />
+	                			<p:inputText id="inputRfcmdpfisica" value="${contribuyente.rfc_md}" size="20">
+	                				<f:validateLength maximum="13"/>
+								</p:inputText>
+								
+	                			<p:outputLabel for="@next" value="Nombres" style="font-weight: bold;" />
+	                			<p:inputText id="inputnombres" value="${contribuyente.nombres}" size="60">
+	                				<f:validateLength maximum="100"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Primer apellido" style="font-weight: bold;" />
+	                			<p:inputText id="inputPrimerapellido" value="${contribuyente.primer_apellido}" size="60">
+	                				<f:validateLength maximum="100"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Segundo Apellido" style="font-weight: bold;" />
+	                			<p:inputText id="inputSegundoApellidob" value="${contribuyente.segundo_apellido}" size="60">
+	                				<f:validateLength maximum="100"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Lugar de Nacimiento" style="font-weight: bold;" />
+	                			<p:inputText id="inputLugarNacimiento" value="${contribuyente.lugar_nacimiento}" size="80">
+	                				<f:validateLength maximum="50"/>
+								</p:inputText>
+								
+	                			<p:outputLabel for="@next" value="Contribuyente" style="font-weight: bold;" />
+	                			<p:inputText id="inputContribuyentespfisica" value="${contribuyente.contribuyente}" size="80">
+	                				<f:validateLength maximum="100"/>
+								</p:inputText>
+	                			
+	                			
+	                		</p:panelGrid>
+                		<f:facet name="footer">
+							<c:choose>
+								<c:when test="${contribuyente.codigo_estatal == null}">
+									<p:commandButton value="Guardar" action="guardar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:when>
+								<c:otherwise>
+									<p:commandButton value="Guardar" action="actualizar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:otherwise>
+							</c:choose>
+                			<p:commandButton value="Cancelar" action="cancelar" icon="ui-icon-clear" immediate="true" style="margin-right: 5px;" />
+                		
+                		
+                		<!-- 
+                		<p:commandButton id="botonEliminar" value="Eliminar" action="eliminarRol"
+								update="${p:resolveFirstComponentWithId('panelRoles', view).clientId} ${p:resolveFirstComponentWithId('dialogoRoles', view).clientId}"
+								disabled="${modeloRolesGrupo.seleccionado == null}"
+								icon="ui-icon-delete" style="margin-right: 5px;">
+								<p:confirm header="Eliminar Rol del Grupo"
+									message="Esta acción no se puede deshacer" icon="ui-icon-alert" />
+							</p:commandButton>
+              
+                		 -->
+                		
+                		
+                		
+                		</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+            </div>
+        </div>
+    </ui:define> 
+
+</ui:composition>

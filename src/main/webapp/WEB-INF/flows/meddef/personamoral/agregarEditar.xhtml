@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/WEB-INF/views/templates/default/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                	<p:focus for="${contribuyente.codigo_estatal == null ? p:resolveFirstComponentWithId('inputCodigoEstatal', view).clientId : p:resolveFirstComponentWithId('inputRfc', view).clientId}" />
+                	<p:growl autoUpdate="true" />
+                	<p:panel header="${contribuyente.codigo_estatal == null ? 'Agregar' : 'Editar'} Persona Moral"> 
+                			<p:panelGrid columns="2">
+                			
+	                			<p:outputLabel for="@next" value="Código Estatal" style="font-weight: bold;" />
+	                			<p:inputText id="inputCodigoEstatal" value="${contribuyente.codigo_estatal}" size="20" />
+	                			
+	                			<p:outputLabel for="@next" value="RFC Md" style="font-weight: bold;" />
+	                			<p:inputText id="inputRfcMd" value="${contribuyente.rfc_md}" size="20">
+	                				<f:validateLength maximum="13"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="RFC" style="font-weight: bold;" />
+	                			<p:inputText id="inputRfc" value="${contribuyente.rfc}" size="20" validator="#{validacionC.rfcM}"/>
+								
+	                			<p:outputLabel for="@next" value="Razón Social" style="font-weight: bold;" />
+	                			<p:inputText id="inputRazonS" value="${contribuyente.razon_social}" size="80">
+	                				<f:validateLength maximum="100"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Contribuyente" style="font-weight: bold;" />
+	                			<p:inputText id="inputContribuyentes" value="${contribuyente.contribuyente}" size="80">
+	                				<f:validateLength maximum="100"/>
+								</p:inputText>
+	                			
+	                		</p:panelGrid>
+                		<f:facet name="footer">
+							<c:choose>
+								<c:when test="${contribuyente.codigo_estatal == null}">
+									<p:commandButton value="Guardar" action="guardar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:when>
+								<c:otherwise>
+									<p:commandButton value="Guardar" action="actualizar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:otherwise>
+							</c:choose>
+                			<p:commandButton value="Cancelar" action="cancelar" icon="ui-icon-clear" immediate="true" style="margin-right: 5px;" />
+
+                		</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+            </div>
+        </div>
+    </ui:define> 
+
+</ui:composition>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="contribuyente">
+	<cache />
+	
+	<resultMap type="ContribuyenteEO" id="contribuyente">
+		<id column="ContribuyenteEO_codigo_estatal" property="codigo_estatal" javaType="Integer"/>
+		<result column="ContribuyenteEO_rfc" property="rfc" javaType="String"/>
+		<result column="ContribuyenteEO_razon_social" property="razon_social" javaType="String"/>
+		<result column="ContribuyenteEO_tipo_persona" property="tipo_persona" javaType="String"/>
+		<result column="ContribuyenteEO_rfc_md" property="rfc_md" javaType="String"/>
+		<result column="ContribuyenteEO_contribuyente" property="contribuyente" javaType="String"/>
+		<result column="ContribuyenteEO_curp" property="curp" javaType="String"/>
+		<result column="ContribuyenteEO_nombres" property="nombres" javaType="String"/>
+		<result column="ContribuyenteEO_primer_apellido" property="primer_apellido" javaType="String"/>
+		<result column="ContribuyenteEO_segundo_apellido" property="segundo_apellido" javaType="String"/>
+		<result column="ContribuyenteEO_lugar_nacimiento" property="lugar_nacimiento" javaType="String"/>
+		<result column="ContribuyenteEO_fecha_hora" property="fecha_hora" javaType="Date"/>
+	</resultMap>
+
+	<sql id="fieldsUno">
+		ContribuyenteEO.contribuyente			ContribuyenteEO_contribuyente
+	</sql>
+	
+	<sql id="fields">
+		ContribuyenteEO.codigo_estatal			ContribuyenteEO_codigo_estatal,
+		ContribuyenteEO.rfc						ContribuyenteEO_rfc,
+		ContribuyenteEO.razon_social			ContribuyenteEO_razon_social,
+		ContribuyenteEO.tipo_persona			ContribuyenteEO_tipo_persona,
+		ContribuyenteEO.rfc_md					ContribuyenteEO_rfc_md,
+		ContribuyenteEO.contribuyente			ContribuyenteEO_contribuyente,
+		ContribuyenteEO.curp					ContribuyenteEO_curp,
+		ContribuyenteEO.nombres					ContribuyenteEO_nombres,
+		ContribuyenteEO.primer_apellido			ContribuyenteEO_primer_apellido,
+		ContribuyenteEO.segundo_apellido		ContribuyenteEO_segundo_apellido,
+		ContribuyenteEO.lugar_nacimiento		ContribuyenteEO_lugar_nacimiento
+	</sql>
+	
+	<sql id="table">
+		contribuyente ContribuyenteEO
+	</sql>
+	
+	<sql id="query">
+		SELECT <include refid="fields" />
+		FROM <include refid="table" />
+	</sql>
+
+	<select id="listadoPF" resultMap="contribuyente">
+		<include refid="query" />
+		WHERE tipo_persona = 'F';
+	</select>
+	
+	<select id="listadoPM" resultMap="contribuyente">
+		<include refid="query" />
+		WHERE tipo_persona = 'M';
+	</select>
+	
+	<insert id="agregarPF" parameterType="ContribuyenteEO">
+		INSERT INTO contribuyente(codigo_estatal,rfc,curp,nombres,primer_apellido,segundo_apellido,lugar_nacimiento,
+			   rfc_md,contribuyente,tipo_persona,fecha_hora)
+		VALUES (#{codigo_estatal},#{rfc},#{curp},#{nombres},#{primer_apellido},#{segundo_apellido},#{lugar_nacimiento},
+			   #{rfc_md},#{contribuyente},'F',NOW());
+	</insert>
+	
+	<insert id="agregarPM" parameterType="ContribuyenteEO">
+		INSERT INTO contribuyente(codigo_estatal,rfc,razon_social,tipo_persona,rfc_md,contribuyente,fecha_hora)
+		VALUES (#{codigo_estatal},#{rfc},#{razon_social},'M',#{rfc_md},#{contribuyente},NOW());
+	</insert>
+
+		
+	<update id="editar" parameterType="java.util.Map">
+		UPDATE contribuyente
+		SET codigo_estatal=#{contribuyente.codigo_estatal},rfc=#{contribuyente.rfc},curp=#{contribuyente.curp},
+			nombres=#{contribuyente.nombres}, primer_apellido=#{contribuyente.primer_apellido},
+			segundo_apellido=#{contribuyente.segundo_apellido},lugar_nacimiento=#{contribuyente.lugar_nacimiento},
+			rfc_md=#{contribuyente.rfc_md},contribuyente=#{contribuyente.contribuyente},fecha_hora=NOW(),
+			razon_social=#{contribuyente.razon_social}
+		WHERE codigo_estatal = #{contribuyenteCe}
+	</update>
+	
+	<select id="reporteContribuyente" resultMap="contribuyente" parameterType="ReporteEO">
+		SELECT DISTINCT <include refid="fields" />
+		FROM <include refid="table" />
+			<if test = "num_expediente != null ||
+						id_estatus != null ||
+						num_credfis != null||
+						id_area != null||
+						anio != null"> 
+ 				 INNER JOIN <include refid="expediente_meddef.table" />
+	   			 ON ContribuyenteEO.codigo_estatal = ExpedienteMeddefEO.codigo_estatal
+			</if>
+			<if test = "anio != null"> 
+ 				 INNER JOIN <include refid="seguimiento_meddef.table" />
+				 ON ExpedienteMeddefEO.id_expediente =  SeguimientoMeddefEO.id_expediente
+			</if>
+			<if test = "contribuyente != null"> 
+				 <bind name="pattern" value="'%' + contribuyente + '%'" />
+ 				 WHERE ContribuyenteEO.contribuyente LIKE #{pattern}
+			</if>
+			<if test = "num_expediente != null"> 
+				 <bind name="pattern" value="'%' + num_expediente + '%'" />
+ 				 AND ExpedienteMeddefEO.num_expediente LIKE #{pattern}
+			</if>
+			<if test = "id_area != null"> 
+ 				 AND ExpedienteMeddefEO.id_area	= #{id_area}
+			</if>
+			<if test = "id_estatus != null"> 
+ 				 AND ExpedienteMeddefEO.id_estatus = #{id_estatus}
+			</if>
+			<if test = "num_credfis != null"> 
+				 <bind name="pattern" value="'%' + num_credfis + '%'" />
+ 				 AND ExpedienteMeddefEO.num_credfis LIKE #{pattern}
+			</if>
+			<if test = "anio != null"> 
+ 				 AND SeguimientoMeddefEO.anio = #{anio}
+			</if>
+			;
+	</select>
+
+	<delete id="delete" parameterType="ContribuyenteEO">
+		DELETE FROM contribuyente
+		WHERE codigo_estatal = #{codigo_estatal}
+	</delete>
+	
+	<select id="comprobarCodigoEstatal" parameterType="ContribuyenteEO" resultType="Integer">
+		SELECT ContribuyenteEO.codigo_estatal
+		FROM <include refid="table" />
+		WHERE codigo_estatal = #{codigo_estatal}
+	</select>
+
+</mapper>
+

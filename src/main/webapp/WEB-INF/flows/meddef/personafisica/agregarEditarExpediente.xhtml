@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/views/templates/default/template.xhtml">
+
+	<ui:define name="content">
+		<div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                	<p:focus for="${expediente_meddef.id == null ? p:resolveFirstComponentWithId('inputCodigoEstatal', view).clientId : p:resolveFirstComponentWithId('inputNumExpediente', view).clientId}" />
+                	<p:growl autoUpdate="true" />
+                	<p:panel header="${expediente_meddef.id == null ? 'Agregar' : 'Editar'} Expediente"> 
+                			<p:panelGrid columns="2">
+                    		
+	                			<p:outputLabel for="@next" value="Número Expediente" style="font-weight: bold;" />
+	                			<p:inputText id="inputNumExpediente" value="${expediente_meddef.num_expediente}" size="60">
+	                				<f:validateLength maximum="50"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Número de Crédito Fiscal" style="font-weight: bold;" />
+	                			<p:inputText id="inputNumCredfis" value="${expediente_meddef.num_credfis}" size="60">
+	                				<f:validateLength maximum="50"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Número de Control" style="font-weight: bold;" />
+	                			<p:inputText id="inputNumControl" value="${expediente_meddef.num_control}" size="60">
+	                				<f:validateLength maximum="50"/>
+								</p:inputText>
+	                			
+	                			<p:outputLabel for="@next" value="Importe" style="font-weight: bold;" />
+	                			<p:inputText id="inputImporte" value="${expediente_meddef.importe}" size="30"/>
+								
+								<p:outputLabel for="@next" value="Tipo Área" style="font-weight: bold;" />
+								<h:selectOneMenu value="#{expediente_meddef.id_area}">
+									<f:selectItems value="#{catalagoMenuC.catAreaList}" />
+								</h:selectOneMenu>
+								
+								<p:outputLabel for="@next" value="Tipo Sentencia" style="font-weight: bold;" />
+								<h:selectOneMenu value="#{expediente_meddef.id_sentencia}">
+									<f:selectItems value="#{catalagoMenuC.catSentenciaList}" />
+								</h:selectOneMenu>
+								
+								<p:outputLabel for="@next" value="Tipo Estatus" style="font-weight: bold;" />
+								<h:selectOneMenu value="#{expediente_meddef.id_estatus}">
+									<f:selectItems value="#{catalagoMenuC.catEstatusList}" />
+								</h:selectOneMenu>
+								
+								</p:panelGrid>
+                		<f:facet name="footer">
+							
+							<c:choose>
+								<c:when test="${expediente_meddef.id == null}">
+									<p:commandButton value="Guardar" action="agregar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:when>
+								<c:otherwise>
+									<p:commandButton value="Guardar" action="editar" icon="ui-icon-save" style="margin-right: 5px;" />
+								</c:otherwise>
+								</c:choose>
+							<p:commandButton value="Cancelar" action="cancelar" icon="ui-icon-clear" immediate="true" style="margin-right: 5px;" />
+						
+						</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+            </div>
+        </div>
+
+		
+	</ui:define>
+</ui:composition>

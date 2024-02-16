@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/WEB-INF/views/templates/default/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                	<p:panel id="panelExpediente" header="Expediente con Código Estatal:  ${contribuyenteAux.codigo_estatal}, RFC: ${contribuyenteAux.rfc} 
+                	y Contribuyente: ${contribuyenteAux.contribuyente}">
+                		<p:dataTable value="${modelo.listado}"  var="fila" emptyMessage="Sin Resultados"
+                			rowKey="${fila.id}" selection="${modelo.seleccionado}" selectionMode="single"
+                			paginator="true" rows="15" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+
+                			<p:column headerText="Número Expediente" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.num_expediente}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.num_expediente}">
+                				<h:outputLabel value="${fila.num_expediente}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Número de Crédito Fiscal" width="95" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.num_credfis}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.num_credfis}">
+                				<h:outputLabel value="${fila.num_credfis}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Número Control" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.num_control}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.num_control}">
+                				<h:outputLabel value="${fila.num_control}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Importe" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.importe}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.importe}">
+                				<h:outputLabel value="${fila.importe}"/>
+                			</p:column>
+      
+                			<p:column headerText="Tipo Área" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_area}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_area}">
+                				<h:outputLabel value="#{catalogoResultadoC.catalogoArea(fila.id_area)}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Tipo Sentencia" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_sentencia}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_sentencia}">
+                				<h:outputLabel value="#{catalogoResultadoC.catalogoSentencia(fila.id_sentencia)}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Tipo Estatus" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.id_estatus}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.id_estatus}">
+                				<h:outputLabel value="#{catalogoResultadoC.catalogoEstatus(fila.id_estatus)}"/>
+                			</p:column>
+
+                			</p:dataTable>
+                		
+                		<f:facet name="footer">
+                			<p:commandButton value="Regresar" action="regresar" icon="ui-icon-triangle-1-w" style="margin-right: 5px;" />
+                			<p:commandButton value="Agregar expediente" action="agregarExpediente" icon="ui-icon-add" style="margin-right: 5px;" />
+                			<c:choose>
+								<c:when test="${validacion == 'true'}">
+									<p:commandButton value="Seguimiento" action="listadoSeguimiento" icon="ui-icon-folder-open" style="margin-right: 5px;" />
+									<p:commandButton value="Editar expediente" action="editarExpediente" icon="ui-icon-edit" style="margin-right: 5px;" />
+									<p:commandButton id="botonEliminar" value="Eliminar" action="borrar"
+										icon="ui-icon-delete" style="margin-right: 5px;">
+										<p:confirm header="Eliminar Expediente"
+										message="Esta acción no se puede deshacer" icon="ui-icon-alert" />
+									</p:commandButton>
+								</c:when>
+							</c:choose>
+                		</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+                <h:form>
+					<p:confirmDialog global="true">
+						<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" style="background-color:#691B31;" />
+						<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" style="background-color:#691B31;"/>
+					</p:confirmDialog>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+                
+            </div>
+        </div>
+        
+    </ui:define>
+
+</ui:composition>

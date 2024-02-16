@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="seguimiento_meddef">
+	<cache />
+	
+	<resultMap type="SeguimientoMeddefEO" id="seguimiento_meddef">
+		<id column="SeguimientoMeddefEO_id" property="id" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_oficio_entrada" property="oficio_entrada" javaType="String"/>
+		<result column="SeguimientoMeddefEO_oficio_salida" property="oficio_salida" javaType="String"/>
+		<result column="SeguimientoMeddefEO_anio" property="anio" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_fecha_recepcion" property="fecha_recepcion" javaType="Date"/>
+		<result column="SeguimientoMeddefEO_oficio_pf" property="oficio_pf" javaType="String"/>
+		<result column="SeguimientoMeddefEO_oficio_sj" property="oficio_sj" javaType="String"/>
+		<result column="SeguimientoMeddefEO_oficio_certificada" property="oficio_certificada" javaType="String"/>
+		<result column="SeguimientoMeddefEO_id_expediente" property="id_expediente" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_id_tipoentrada" property="id_tipoentrada" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_fecha_hora" property="fecha_hora" javaType="Date"/>
+		<result column="SeguimientoMeddefEO_desc_seguimiento" property="desc_seguimiento" javaType="String"/>
+	</resultMap>
+	
+	<resultMap type="SeguimientoMeddefEO" id="seguimiento_meddefRE">
+		<id column="SeguimientoMeddefEO_id" property="id" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_oficio_entrada" property="oficio_entrada" javaType="String"/>
+		<result column="SeguimientoMeddefEO_oficio_salida" property="oficio_salida" javaType="String"/>
+		<result column="SeguimientoMeddefEO_anio" property="anio" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_fecha_recepcion" property="fecha_recepcion" javaType="Date"/>
+		<result column="SeguimientoMeddefEO_oficio_pf" property="oficio_pf" javaType="String"/>
+		<result column="SeguimientoMeddefEO_oficio_sj" property="oficio_sj" javaType="String"/>
+		<result column="SeguimientoMeddefEO_oficio_certificada" property="oficio_certificada" javaType="String"/>
+		<result column="SeguimientoMeddefEO_id_expediente" property="id_expediente" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_id_tipoentrada" property="id_tipoentrada" javaType="Integer"/>
+		<result column="SeguimientoMeddefEO_fecha_hora" property="fecha_hora" javaType="Date"/>
+		<result column="SeguimientoMeddefEO_desc_seguimiento" property="desc_seguimiento" javaType="String"/>
+		<association property="contribuyente" javaType="String" >
+			<result column="ContribuyenteEO_contribuyente" property="contribuyente" javaType="String"/>
+		</association>
+		<association property="num_expediente" javaType="String" >
+			<result column="ExpedienteMeddefEO_num_expediente" property="num_expediente" javaType="String"/>
+		</association>
+	</resultMap>
+	
+	<sql id="fields">
+		SeguimientoMeddefEO.id_seguimiento			SeguimientoMeddefEO_id,
+		SeguimientoMeddefEO.oficio_entrada			SeguimientoMeddefEO_oficio_entrada,
+		SeguimientoMeddefEO.oficio_salida			SeguimientoMeddefEO_oficio_salida,
+		SeguimientoMeddefEO.anio					SeguimientoMeddefEO_anio,
+		SeguimientoMeddefEO.fecha_recepcion			SeguimientoMeddefEO_fecha_recepcion,
+		SeguimientoMeddefEO.oficio_pf				SeguimientoMeddefEO_oficio_pf,
+		SeguimientoMeddefEO.oficio_sj				SeguimientoMeddefEO_oficio_sj,
+		SeguimientoMeddefEO.oficio_certificada		SeguimientoMeddefEO_oficio_certificada,
+		SeguimientoMeddefEO.id_expediente			SeguimientoMeddefEO_id_expediente,
+		SeguimientoMeddefEO.id_tipoentrada			SeguimientoMeddefEO_id_tipoentrada,
+		SeguimientoMeddefEO.desc_seguimiento		SeguimientoMeddefEO_desc_seguimiento
+	</sql>
+	
+	<sql id="fieldsAll">
+		<include refid="fields" />,
+		<include refid="expediente_meddef.fieldsUno" />,
+		<include refid="contribuyente.fieldsUno" />
+		
+	</sql>
+	
+	<sql id="table">
+		seguimiento_meddef SeguimientoMeddefEO
+	</sql>
+	
+	<sql id="query">
+		SELECT <include refid="fields" />
+		FROM <include refid="table" />
+	</sql>
+
+	<select id="listado" resultMap="seguimiento_meddef" parameterType="ExpedienteMeddefEO">
+		<include refid="query" />
+		WHERE id_expediente=#{id}
+	</select>
+	
+	<insert id="insertar" parameterType="java.util.Map">
+		INSERT INTO seguimiento_meddef(oficio_entrada,oficio_salida,anio,fecha_recepcion,oficio_pf,oficio_sj,
+					oficio_certificada,id_expediente,id_tipoentrada,fecha_hora,desc_seguimiento)
+		VALUES (#{seguimiento_meddef.oficio_entrada},#{seguimiento_meddef.oficio_salida},#{seguimiento_meddef.anio},
+			   #{seguimiento_meddef.fecha_recepcion},#{seguimiento_meddef.oficio_pf},#{seguimiento_meddef.oficio_sj},
+			   #{seguimiento_meddef.oficio_certificada},#{expediente_meddef.id},#{seguimiento_meddef.id_tipoentrada},
+			   NOW(),#{seguimiento_meddef.desc_seguimiento})
+	</insert>
+	
+	<update id="editar" parameterType="SeguimientoMeddefEO">
+		UPDATE seguimiento_meddef
+		SET  oficio_entrada=#{oficio_entrada},oficio_salida=#{oficio_salida},anio=#{anio},fecha_recepcion=#{fecha_recepcion},
+			 oficio_pf=#{oficio_pf},oficio_sj=#{oficio_sj},oficio_certificada=#{oficio_certificada},
+			 id_tipoentrada=#{id_tipoentrada},fecha_hora=NOW(),desc_seguimiento=#{desc_seguimiento}
+		WHERE id_seguimiento= #{id}
+	</update>
+	
+	<select id="reporteSeguimiento" resultMap="seguimiento_meddefRE" parameterType="ReporteEO">
+		SELECT <include refid="fieldsAll" /> 
+		FROM <include refid="table" />
+		INNER JOIN <include refid="expediente_meddef.table" />
+		ON SeguimientoMeddefEO.id_expediente = ExpedienteMeddefEO.id_expediente  
+		INNER JOIN <include refid="contribuyente.table" />
+		ON ExpedienteMeddefEO.codigo_estatal = ContribuyenteEO.codigo_estatal
+			<if test = "contribuyente != null"> 
+				 <bind name="pattern" value="'%' + contribuyente + '%'" />
+ 				 WHERE ContribuyenteEO.contribuyente LIKE #{pattern}
+			</if>
+			<if test = "num_expediente != null"> 
+				 <bind name="pattern" value="'%' + num_expediente + '%'" />
+ 				 AND ExpedienteMeddefEO.num_expediente LIKE #{pattern}
+			</if>
+			<if test = "id_area != null"> 
+ 				 AND ExpedienteMeddefEO.id_area	= #{id_area}
+			</if>
+			<if test = "id_estatus != null"> 
+ 				 AND ExpedienteMeddefEO.id_estatus = #{id_estatus}
+			</if>
+			<if test = "num_credfis != null"> 
+				 <bind name="pattern" value="'%' + num_credfis + '%'" />
+ 				 AND ExpedienteMeddefEO.num_credfis LIKE #{pattern}
+			</if>
+			<if test = "anio != null"> 
+ 				 AND SeguimientoMeddefEO.anio = #{anio}
+			</if>
+			;
+	</select>
+	
+	<delete id="delete" parameterType="SeguimientoMeddefEO">
+		DELETE FROM seguimiento_meddef
+		WHERE id_seguimiento = #{id}
+	</delete>
+
+</mapper>
+

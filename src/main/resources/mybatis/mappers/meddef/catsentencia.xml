@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cat_sentencia">
+	<cache />
+	
+	<resultMap type="CatSentenciaEO" id="cat_sentencia">
+		<id column="CatSentenciaEO_id" property="id" javaType="Integer"/>
+		<result column="CatSentenciaEO_cve_sentencia" property="cve_sentencia" javaType="String"/>
+		<result column="CatSentenciaEO_desc_sentencia" property="desc_sentencia" javaType="String"/>
+	</resultMap>
+	
+	<sql id="fields">
+		CatSentenciaEO.id_sentencia							CatSentenciaEO_id,
+		CatSentenciaEO.cve_sentencia						CatSentenciaEO_cve_sentencia,
+		CatSentenciaEO.desc_sentencia						CatSentenciaEO_desc_sentencia
+	</sql>
+	
+	<sql id="query">
+		SELECT <include refid="fields" />
+		FROM <include refid="table" />
+	</sql>
+
+	<sql id="table">
+		cat_sentencia CatSentenciaEO
+	</sql>
+	
+	<sql id="orderByFields">
+		CatSentenciaEO_id
+	</sql>
+	
+	<select id="listado" resultMap="cat_sentencia">
+		<include refid="query" />
+		ORDER BY CatSentenciaEO_cve_sentencia ASC
+	</select>
+	
+	<select id="listadoStringUno" resultType="String" parameterType="Integer">
+		SELECT CatSentenciaEO.cve_sentencia
+		FROM <include refid="table" />
+		WHERE id_sentencia = #{integer}
+	</select>
+	
+	<select id="listadoStringDos" resultType="String" parameterType="Integer">
+		SELECT CatSentenciaEO.desc_sentencia
+		FROM <include refid="table" />
+		WHERE id_sentencia = #{integer}
+	</select>
+
+</mapper>
+

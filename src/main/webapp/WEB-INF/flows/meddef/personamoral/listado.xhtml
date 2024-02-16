@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/WEB-INF/views/templates/default/template.xhtml">
+	
+
+    <ui:define name="content">
+        <div class="ui-g" >
+            <div class="ui-g-12" >
+                <h:form >
+                	<p:panel id="panelPersonmoral" header="Persona Moral" >
+                		<p:dataTable value="${modelo.listado}" var="fila" emptyMessage="Sin Resultados"
+                			rowKey="${fila.codigo_estatal}" selection="${modelo.seleccionado}" selectionMode="single"
+                			paginator="true" rows="15" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+                			
+                			<p:column headerText="Código Estatal" width="45" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.codigo_estatal}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.codigo_estatal}">
+                				<h:outputLabel value="${fila.codigo_estatal}"/>
+                			</p:column>
+                			
+                			<p:column headerText="RFC Md" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.rfc_md}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.rfc_md}">
+                				<h:outputLabel value="${fila.rfc_md}"/>
+                			</p:column>
+                			
+                			<p:column headerText="RFC" width="76" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.rfc}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.rfc}">
+                				<h:outputLabel value="${fila.rfc}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Razón Social" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.razon_social}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.razon_social}">
+                				<h:outputLabel value="${fila.razon_social}"/>
+                			</p:column>
+                			
+                			<p:column headerText="Contribuyente" width="75" style="text-align:center;"
+                				filterable="true" filterBy="#{fila.contribuyente}" filterMatchMode="contains" filterStyle="width:90%"
+            					sortable="true" sortBy="${fila.contribuyente}">
+                				<h:outputLabel value="${fila.contribuyente}"/>
+                			</p:column>
+
+                		</p:dataTable>
+                		
+                		<f:facet name="footer">
+                			<p:commandButton value="Agregar" action="agregar" icon="ui-icon-add" style="margin-right: 5px;" />	
+							<c:choose>
+								<c:when test="${validacion == 'true'}">
+									<p:commandButton value="Expediente" action="expediente" icon="ui-icon-folder-open" style="margin-right: 5px; " />
+									<p:commandButton value="Editar" action="editar" icon="ui-icon-edit" style="margin-right: 5px; " />
+									<p:commandButton id="botonEliminar" value="Eliminar" action="borrar"
+										icon="ui-icon-delete" style="margin-right: 5px;">
+										<p:confirm header="Eliminar Contribuyente"
+										message="Esta acción no se puede deshacer" icon="ui-icon-alert" />
+									</p:commandButton>
+								</c:when>
+							</c:choose>
+						</f:facet>
+                	</p:panel>
+                	
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </h:form>
+                <h:form>
+					<p:confirmDialog global="true">
+						<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" style="background-color:#691B31;" />
+						<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" style="background-color:#691B31;"/>
+					</p:confirmDialog>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+            </div>
+        </div>
+	<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+	</ui:define>
+	
+</ui:composition>
+
+	
